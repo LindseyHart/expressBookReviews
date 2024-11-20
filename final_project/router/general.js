@@ -32,27 +32,35 @@ public_users.post("/register", (req, res) => {
     return res.status(404).json({ message: "Unable to register user." });
 });
 
+async function getAllBooks() {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(books);
+      }, 1);
+    });
+  }
+
 // Get the book list available in the shop
-public_users.get('/',function (req, res) {
-  return res.send(JSON.stringify(books, null, 4));
+public_users.get('/', async function (req, res) {
+  return res.send(await getAllBooks());
 });
 
 // Get book details based on ISBN
-public_users.get('/isbn/:isbn',function (req, res) {
+public_users.get('/isbn/:isbn', async function (req, res) {
     let isbn = req.params.isbn;
     let book = books[isbn];
     return res.send(book);
  });
 
 // Get book details based on author
-public_users.get('/author/:author',function (req, res) {
+public_users.get('/author/:author', async function (req, res) {
     const author = req.params.author;
     let filteredBook =  Object.values(books).filter((book) => book.author === author);
     res.send(filteredBook);
 });
 
 // Get all books based on title
-public_users.get('/title/:title',function (req, res) {
+public_users.get('/title/:title', async function (req, res) {
     const title = req.params.title;
     let filteredBook =  Object.values(books).filter((book) => book.title === title);
     res.send(filteredBook);
